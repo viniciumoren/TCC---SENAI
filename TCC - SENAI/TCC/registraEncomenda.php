@@ -1,30 +1,26 @@
 <?php
-if (isset($_POST['submit'])) {
-    // Uncomment to debug input data
-    /*
-    print_r('Nome:' .$_POST['nome']);
-    print_r('<br>');
-    print_r('Status:' .$_POST['status']);
-    print_r('<br>');
-    print_r('Apartamento:' .$_POST['apartamento']);
-    print_r('<br>');
-    print_r('Data:' .$_POST['data']);
-    print_r('<br>');
-    */
+session_start(); // Iniciar sessão para acessar a variável de sessão
 
+if (isset($_POST['submit'])) {
     include_once('config.php');
 
     $status = $_POST['status'];
     $nome = $_POST['nome'];
     $apartamento = $_POST['apartamento'];
     $data = $_POST['data'];
+    
+    // Supondo que o e-mail do usuário logado está armazenado na sessão
+    $email_registrante = $_SESSION['email'];
 
-    $result = mysqli_query($conexao, "INSERT INTO listaencomenda(status,nome,apartamento,data) 
-        VALUES ('$status','$nome','$apartamento', '$data')");
+    // Inserir os dados no banco, incluindo o e-mail de quem registrou
+    $result = mysqli_query($conexao, "INSERT INTO listaencomenda(status, nome, apartamento, data, email_registrante) 
+        VALUES ('$status', '$nome', '$apartamento', '$data', '$email_registrante')");
 
+    // Redirecionar para a lista de encomendas
     header('location: listaEncomenda.php');
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
