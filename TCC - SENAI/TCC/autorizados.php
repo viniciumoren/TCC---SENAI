@@ -41,21 +41,18 @@ mysqli_close($conexao);
     <title>SISTEMA | GN</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
     <style>
         html {
-            background: linear-gradient(to right, rgba(20, 147, 220), rgb(17, 54, 71));
             height: 100vh;
 
         }
 
-        footer {
-            background: linear-gradient(to right, rgba(20, 147, 220), rgb(17, 54, 71));
-
-        }
+        footer {}
 
         body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: linear-gradient(to right, rgba(20, 147, 220), rgb(17, 54, 71));
+            font-family: 'Poppins', sans-serif;
             color: white;
             text-align: center;
             min-width: 700px;
@@ -162,12 +159,13 @@ mysqli_close($conexao);
     <div class="box-search">
         <input type="search" class="form-control w-25" placeholder="Pesquisar" id="pesquisar">
         <button onclick="searchData()" class='btn btn-primary'>
-            <svg xmins="http://www.w3.otg/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
                 viewBox="0 0 16 16">
                 <path
-                    d="M11.742 10.344a6.5 6.5 0 1 0-1,397 1398h-.00113.85 385a1 0 0 0 1.415-1.4141-3.85zm-5.44.99.69a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0--11z">
-                </path>
+                    d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.415 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z" />
+                <path d="M6.5 12a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11zm0-1a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9z" />
             </svg>
+
         </button>
     </div>
 
@@ -274,7 +272,7 @@ mysqli_close($conexao);
     document.querySelector("th:nth-child(4)").addEventListener('mouseover', () => showVideo('video/destino.mp4'));  // Destino
     document.querySelector("th:nth-child(5)").addEventListener('mouseover', () => showVideo('video/motivo.mp4'));  // Motivo
     document.querySelector("th:nth-child(6)").addEventListener('mouseover', () => showVideo('video/veiculo.mp4')); // Veículo
-    document.querySelector("th:nth-child(7)").addEventListener('mouseover', () => showVideo('video/veiculo.mp4')); // Veículo
+    document.querySelector("th:nth-child(7)").addEventListener('mouseover', () => showVideo('video/placa.mp4')); // Veículo
 
     // Para a barra de pesquisa
     document.getElementById('pesquisar').addEventListener('mouseover', () => showVideo('video/pesquisar.mp4'));
