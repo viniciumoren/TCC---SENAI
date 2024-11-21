@@ -42,9 +42,11 @@ mysqli_close($conexao);
     <title>SISTEMA | GN</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
     <style>
         body {
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: 'Poppins', sans-serif;
             background: linear-gradient(to right, rgba(20, 147, 220), rgb(17, 54, 71));
             color: white;
             text-align: center;
@@ -120,7 +122,7 @@ mysqli_close($conexao);
             background-color: #2F3C50;
         }
 
-        
+
 
         /* Estilo para riscar o texto */
         .strikethrough {
@@ -128,8 +130,6 @@ mysqli_close($conexao);
             color: rgba(255, 255, 255, 0.5);
             /* Um pouco mais claro para indicar que está riscado */
         }
-    
-
     </style>
 </head>
 
@@ -174,12 +174,14 @@ mysqli_close($conexao);
     <div class="box-search">
         <input type="search" class="form-control w-25" placeholder="Pesquisar" id="pesquisar">
         <button onclick="searchData()" class='btn btn-primary'>
-            <svg xmins="http://www.w3.otg/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
                 viewBox="0 0 16 16">
                 <path
-                    d="M11.742 10.344a6.5 6.5 0 1 0-1,397 1398h-.00113.85 385a1 0 0 0 1.415-1.4141-3.85zm-5.44.99.69a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0--11z">
-                </path>
+                    d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.415 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z" />
+                <path d="M6.5 12a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11zm0-1a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9z" />
             </svg>
+
+
         </button>
     </div>
     <div class="menu-container-registra" ">
@@ -197,6 +199,10 @@ mysqli_close($conexao);
                     <th scope="col">Nome</th>
                     <th scope="col">Apartamento</th>
                     <th scope="col">data</th>
+                    <th scope="col">Quem Recebeu</th>
+                    <th scope="col">Quem Entregou</th>
+                    <th scope="col">Horário de Entrega</th>
+
 
 
 
@@ -208,16 +214,30 @@ mysqli_close($conexao);
                     // Verifica se o status é "entregue"
                     $class = (htmlspecialchars($user_data['status']) === 'entregue') ? 'strikethrough' : '';
 
+                    // Formatar a data para "Hora:Minuto Dia/Mês/Ano"
+                    $dataFormatada = date('H:i d/m/Y', strtotime($user_data['data']));
+
+                    // Verifica se horario_entrega possui um valor antes de formatar
+                    if (!empty($user_data['horario_entrega'])) {
+                        $dataFormatada2 = date('H:i d/m/Y', strtotime($user_data['horario_entrega']));
+                    } else {
+                        $dataFormatada2 = 'N/A'; // Ou qualquer outro valor que deseje exibir
+                    }
+
                     echo "<tr class='$class' data-id='" . htmlspecialchars($user_data['id']) . "'>";
                     echo "<td>" . htmlspecialchars($user_data['id']) . "</td>";
                     echo "<td>" . htmlspecialchars($user_data['status']) . "</td>";
-                    echo "<td>" . htmlspecialchars($user_data['nome']) . "</td>"; // Considere ocultar
+                    echo "<td>" . htmlspecialchars($user_data['nome']) . "</td>";
                     echo "<td>" . htmlspecialchars($user_data['apartamento']) . "</td>";
-                    echo "<td>" . htmlspecialchars($user_data['data']) . "</td>";
+                    echo "<td>" . $dataFormatada . "</td>"; // Exibe a data formatada
+                    echo "<td>" . htmlspecialchars($user_data['email_registrante']) . "</td>";
+                    echo "<td>" . htmlspecialchars($user_data['email_entregador']) . "</td>";
+                    echo "<td>" . $dataFormatada2 . "</td>"; // Exibe a data de saída formatada ou 'N/A'
                     echo '</tr>';
                 }
                 ?>
             </tbody>
+
 
 
         </table>
@@ -273,6 +293,9 @@ mysqli_close($conexao);
     document.querySelector("th:nth-child(3)").addEventListener('mouseover', () => showVideo('video/nome.mp4'));   // Nome
     document.querySelector("th:nth-child(4)").addEventListener('mouseover', () => showVideo('video/apartamento.mp4')); // Apartamento
     document.querySelector("th:nth-child(5)").addEventListener('mouseover', () => showVideo('video/data.mp4')); // Data
+    document.querySelector("th:nth-child(6)").addEventListener('mouseover', () => showVideo('video/quem_recebeu.mp4')); // Data
+    document.querySelector("th:nth-child(7)").addEventListener('mouseover', () => showVideo('video/quem_entregou.mp4')); // Data
+    document.querySelector("th:nth-child(8)").addEventListener('mouseover', () => showVideo('video/horario_entrega.mp4')); // Data
 
     // Para a barra de pesquisa
     document.getElementById('pesquisar').addEventListener('mouseover', () => showVideo('video/pesquisar.mp4'));
