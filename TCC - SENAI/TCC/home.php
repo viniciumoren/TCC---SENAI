@@ -11,7 +11,6 @@
             text-align: center;
             color: white;
             background-image: linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)), url(https://i0.wp.com/catagua.com.br/wp-content/uploads/2021/03/confira-as-vantagens-de-escolher-uma-casa-em-condominio-fechado.jpg?resize=1024%2C576&ssl=1);
-            width: 100%;
             height: 100vh;
             background-repeat: no-repeat;
             background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(https://i0.wp.com/catagua.com.br/wp-content/uploads/2021/03/confira-as-vantagens-de-escolher-uma-casa-em-condominio-fechado.jpg?resize=1024%2C576&ssl=1);
@@ -40,8 +39,7 @@
     </style>
 </head>
 <body>
-    <h1>Que Coisa Boa</h1>
-    <h2>Vinicius Moreno</h2>
+
     <div class="box">
         <a href="tela-de-login.php">Login</a>
         <a href="formulario.php">Cadastre-se</a>
