@@ -1,4 +1,5 @@
 <?php
+session_start();
 include_once('config.php');
 
 // Verifica se o formulário foi enviado
@@ -12,9 +13,12 @@ if (isset($_POST['submit'])) {
     $placa = mysqli_real_escape_string($conexao, $_POST['placa']);
     $data = mysqli_real_escape_string($conexao, $_POST['data']);
 
+    // Supondo que você tenha o e-mail do usuário na sessão
+    $email_usuario = $_SESSION['email'];
+
     // Cria a query de inserção
-    $query = "INSERT INTO listaentrada(nome, documento, destino, motivo, veiculo, placa, data) 
-              VALUES ('$nome', '$documento', '$destino', '$motivo', '$veiculo', '$placa', '$data')";
+    $query = "INSERT INTO listaentrada (nome, documento, destino, motivo, veiculo, placa, data, email_registro) 
+              VALUES ('$nome', '$documento', '$destino', '$motivo', '$veiculo', '$placa', '$data', '$email_usuario')";
 
     // Executa a consulta
     if (mysqli_query($conexao, $query)) {
@@ -30,6 +34,7 @@ if (isset($_POST['submit'])) {
     mysqli_close($conexao);
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -346,4 +351,4 @@ if (isset($_POST['submit'])) {
     </script>
 </body>
 
-</html>
+</html> 
