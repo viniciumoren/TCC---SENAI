@@ -41,10 +41,11 @@ mysqli_close($conexao);
     <title>SISTEMA | GN</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
+    <style>
         body {
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: 'Poppins', sans-serif;
             background: linear-gradient(to right, rgba(20, 147, 220), rgb(17, 54, 71));
             color: white;
             text-align: center;
@@ -117,14 +118,13 @@ mysqli_close($conexao);
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
             background-color: #000;
         }
-}
+        }
     </style>
 </head>
 
 <body>
     <div class="header">
-        <nav class="navbar navbar-expand-lg shadow-sm"
-            style="background: transparent;">
+        <nav class="navbar navbar-expand-lg shadow-sm" style="background: transparent;">
             <div class="container-fluid">
                 <a class="navbar-brand fw-bold" href="#" style="font-size: 1.5rem; color: white;">
                     SYS PRO
@@ -167,12 +167,13 @@ mysqli_close($conexao);
     <div class="box-search">
         <input type="search" class="form-control w-25" placeholder="Pesquisar" id="pesquisar">
         <button onclick="searchData()" class='btn btn-primary'>
-            <svg xmins="http://www.w3.otg/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
                 viewBox="0 0 16 16">
                 <path
-                    d="M11.742 10.344a6.5 6.5 0 1 0-1,397 1398h-.00113.85 385a1 0 0 0 1.415-1.4141-3.85zm-5.44.99.69a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0--11z">
-                </path>
+                    d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.415 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z" />
+                <path d="M6.5 12a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11zm0-1a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9z" />
             </svg>
+
         </button>
     </div>
     <div class="menu-container-registra">
@@ -193,7 +194,10 @@ mysqli_close($conexao);
                         <th scope="col">Motivo</th>
                         <th scope="col">Veiculo</th>
                         <th scope="col">Placa</th>
-                        <th scope="col">Data</th>
+                        <th scope="col">Horário da Saída </th>
+                        <th scope="col">Quem Registrou Entrada</th>
+                        <th scope="col">Quem Registrou Saída</th>
+                        <th scope="col">Horário da Saída</th>
 
 
 
@@ -202,20 +206,37 @@ mysqli_close($conexao);
                 <tbody>
                     <?php
                     while ($user_data = mysqli_fetch_assoc($result)) {
-                        echo "<tr>";
+                        $dataFormatadaEntrada = date('H:i d/m/Y', strtotime($user_data['data']));
+                        $dataFormatadaSaida = !empty($user_data['horario_saida']) ? date('H:i d/m/Y', strtotime($user_data['horario_saida'])) : '';
+
+                        echo "<tr id='linha-" . htmlspecialchars($user_data['id']) . "'>";
                         echo "<td>" . htmlspecialchars($user_data['id']) . "</td>";
                         echo "<td>" . htmlspecialchars($user_data['nome']) . "</td>";
-                        echo "<td>" . htmlspecialchars($user_data['documento']) . "</td>"; // Considere ocultar
-                        echo "<td>" . htmlspecialchars($user_data['destino']) . "</td>"; // Considere ocultar
+                        echo "<td>" . htmlspecialchars($user_data['documento']) . "</td>";
+                        echo "<td>" . htmlspecialchars($user_data['destino']) . "</td>";
                         echo "<td>" . htmlspecialchars($user_data['motivo']) . "</td>";
                         echo "<td>" . htmlspecialchars($user_data['veiculo']) . "</td>";
                         echo "<td>" . htmlspecialchars($user_data['placa']) . "</td>";
-                        echo "<td>" . htmlspecialchars($user_data['data']) . "</td>";
+                        echo "<td>" . $dataFormatadaEntrada . "</td>";
+                        echo "<td>" . htmlspecialchars($user_data['email_registro']) . "</td>";
+                        echo "<td>" . htmlspecialchars($user_data['email_registro_saida']) . "</td>";
+                        echo "<td class='coluna-horario-saida'>" . $dataFormatadaSaida . "</td>";
 
-                        echo '</tr>';
+                        // Exibir o botão apenas se ainda não houver registro de saída
+                        if (empty($user_data['horario_saida']) && empty($user_data['email_registro_saida'])) {
+                            echo "<td>
+                    <button class='btn btn-success' onclick='registrarSaida(" . htmlspecialchars($user_data['id']) . ")'>Registrar Saída</button>
+                  </td>";
+                        } else {
+                            echo "<td>Saída registrada</td>";
+                        }
+
+                        echo "</tr>";
                     }
                     ?>
                 </tbody>
+
+
             </table>
         </div>
 
@@ -272,6 +293,9 @@ mysqli_close($conexao);
     document.querySelector("th:nth-child(6)").addEventListener('mouseover', () => showVideo('video/veiculo.mp4')); // Veículo
     document.querySelector("th:nth-child(7)").addEventListener('mouseover', () => showVideo('video/placa.mp4'));   // Placa
     document.querySelector("th:nth-child(8)").addEventListener('mouseover', () => showVideo('video/data.mp4'));    // Data
+    document.querySelector("th:nth-child(9)").addEventListener('mouseover', () => showVideo('video/quem_registrou_entrada.mp4'));    // Data
+    document.querySelector("th:nth-child(10)").addEventListener('mouseover', () => showVideo('video/quem_registrou_saida.mp4'));    // Data
+    document.querySelector("th:nth-child(11)").addEventListener('mouseover', () => showVideo('video/horario_da_saida.mp4'));    // Data
 
     // Para a barra de pesquisa
     document.getElementById('pesquisar').addEventListener('mouseover', () => showVideo('video/pesquisar.mp4'));
@@ -281,6 +305,32 @@ mysqli_close($conexao);
     allElements.forEach(element => {
         element.addEventListener('mouseout', hideVideo);
     });
+    function registrarSaida(id) {
+    // Definindo a URL de onde o PHP processa a requisição para registrar a saída
+    const email = "<?php echo htmlspecialchars($logado); ?>"; // O email do usuário logado
+    const horario = new Date().toISOString().slice(0, 19).replace('T', ' '); // Obtendo o horário atual
+
+    // Enviar os dados via AJAX
+    fetch('registraSaida.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id, email, horario })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Saída registrada com sucesso!');
+                location.reload(); // Atualiza a página após registrar a saída
+            } else {
+                alert('Erro ao registrar a saída.');
+            }
+        })
+        .catch(error => console.error('Erro:', error));
+}
+
+
 </script>
 
 
